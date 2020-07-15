@@ -8,3 +8,4 @@ def matrix_shape(matrix):
         size.append(len(matrix))
         matrix = matrix[0]
     return (size)
+
