@@ -18,6 +18,6 @@ def add_arrays(arr1, arr2):
     else:
         shape = matrix_shape(arr1)
         new_array = []
-        for i in range(0, shape[0]):
+        for i in range(len(arr1)):
             new_array.append(arr1[i] + arr2[i])
         return (new_array)
