@@ -13,7 +13,7 @@ def matrix_shape(matrix):
 
 def add_matrices2D(mat1, mat2):
     """ doc """
-    if (matrix_shape(mat1) != matrix_shape(mat2)):
+    if len(arr1) != len(arr2):
         return (None)
     else:
         shape = matrix_shape(mat1)
