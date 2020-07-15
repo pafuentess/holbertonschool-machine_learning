@@ -2,6 +2,7 @@
 
 
 def matrix_shape(matrix):
+    """ doc """
     size = []
     while type(matrix) == list:
         size.append(len(matrix))
@@ -10,6 +11,7 @@ def matrix_shape(matrix):
 
 
 def add_matrices2D(mat1, mat2):
+    """ doc """
     if (matrix_shape(mat1) != matrix_shape(mat2)):
         return (None)
     else:

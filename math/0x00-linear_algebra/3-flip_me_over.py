@@ -2,6 +2,7 @@
 
 
 def matrix_shape(matrix):
+    """ doc """
     size = []
     while type(matrix) == list:
         size.append(len(matrix))
@@ -10,6 +11,7 @@ def matrix_shape(matrix):
 
 
 def matrix_transpose(matrix):
+    """ doc """
     shape = matrix_shape(matrix)
     matrix_T = []
     if (shape[0] == shape[1]):
