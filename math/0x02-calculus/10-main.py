@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+poly_derivative = __import__('10-matisse').poly_derivative
+
+poly = [5, 3, 0, 1]
+print(poly_derivative(poly))
+
+poly = [5]
+print(poly_derivative(poly))
+
+poly = [0, 2, -3, 0, 0, 5]
+print(poly_derivative(poly))
+
+poly1 = [0, "paula", -3, 0, 0, 5]
+print(poly_derivative(poly1))
