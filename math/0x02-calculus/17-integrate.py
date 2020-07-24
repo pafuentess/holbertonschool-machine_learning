@@ -3,9 +3,12 @@
 
 
 def check_0(new_poly):
+    """ doc """
     for i in range(len(new_poly) - 1, 0, -1):
         if new_poly[i] == 0:
             new_poly.pop()
+        else:
+            break
     return new_poly
 
 
