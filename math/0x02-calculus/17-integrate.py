@@ -2,12 +2,17 @@
 """ doc """
 
 
+def check_0(new_poly):
+    for i in range(len(new_poly) - 1, 0, -1):
+        if new_poly[i] == 0:
+            new_poly.pop()
+    return new_poly
+
+
 def poly_integral(poly, C=0):
     """ doc """
-    if poly is None or poly == [] or type(poly) is not list:
-        return None
 
-    if C is None:
+    if poly is None or poly == [] or type(poly) is not list:
         return None
 
     if type(C) is int or type(C) is float:
@@ -16,8 +21,6 @@ def poly_integral(poly, C=0):
 
         new_poly = [C]
         for i in range(0, len(poly)):
-            if poly[i] is None:
-                return None
             if type(poly[i]) is int or type(poly[i]) is float:
                 operation = poly[i] / (i + 1)
                 if operation.is_integer():
@@ -25,6 +28,7 @@ def poly_integral(poly, C=0):
                 new_poly.append(operation)
             else:
                 return None
-        return (new_poly)
+        check = check_0(new_poly)
+        return (check)
     else:
         return None
