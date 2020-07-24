@@ -8,7 +8,7 @@ def poly_integral(poly, C=0):
         return None
 
     if type(C) is int or type(C) is float:
-        if len(poly) == 1 and poly[0] == 0:
+        if poly == [0]:
             return C
 
         new_poly = [C]
