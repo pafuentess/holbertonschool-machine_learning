@@ -15,16 +15,16 @@ def poly_integral(poly, C=0):
             return C
 
         new_poly = [C]
-        for i in range(len(poly)):
+        for i in range(0, len(poly)):
+            if poly[i] is None:
+                return None
             if type(poly[i]) is int or type(poly[i]) is float:
-                pass
+                operation = poly[i] / (i + 1)
+                if operation.is_integer():
+                    operation = int(operation)
+                new_poly.append(operation)
             else:
                 return None
-        for i in range(0, len(poly)):
-            operation = poly[i] / (i + 1)
-            if operation.is_integer():
-                operation = int(operation)
-            new_poly.append(operation)
         return (new_poly)
     else:
         return None
