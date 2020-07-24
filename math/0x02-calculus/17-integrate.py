@@ -7,6 +7,9 @@ def poly_integral(poly, C=0):
     if poly is None or poly == [] or type(poly) is not list:
         return None
 
+    if C is None:
+        return None
+
     if type(C) is int or type(C) is float:
         if poly == [0]:
             return C
