@@ -20,7 +20,7 @@ def poly_integral(poly, C=0):
 
     if type(C) is int or type(C) is float:
         if poly == [0]:
-            return C
+            return [C]
         if C % 1 == 0:
             C = int(C)
 
