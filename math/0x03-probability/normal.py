@@ -13,7 +13,6 @@ class Normal:
                 raise ValueError("data must contain multiple values")
             if stddev <= 0:
                 raise ValueError("stddev must be a positive value")
-
             self.mean = float(sum(data) / len(data))
             pre_var = []
             for i in data:
@@ -21,7 +20,7 @@ class Normal:
             var = float(sum(pre_var) / len(pre_var))
             self.stddev = float(var ** (0.5))
         else:
-            if stddev < 0:
+            if stddev <= 0:
                 raise ValueError("stddev must be a positive value")
             self.mean = float(mean)
             self.stddev = float(stddev)
