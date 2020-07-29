@@ -20,12 +20,14 @@ class Poisson:
         self.euler = 2.7182818285
 
     def factorial(self, x):
+        """ doc """
         factorial = 1
         for i in range(1, x+1):
             factorial = factorial * i
         return (factorial)
 
     def pmf(self, k):
+        """ doc """
         if k >= 0:
             k = int(k)
             num = (self.euler**(-self.lambtha) * (self.lambtha**k))
@@ -35,6 +37,7 @@ class Poisson:
             return 0
 
     def cdf(self, k):
+        """ doc """
         if k >= 0:
             k = int(k)
             pmf1 = 0

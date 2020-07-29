@@ -6,14 +6,26 @@ class Binomial:
     """ doc """
 
     def __init__(self, data=None, n=1, p=0.5):
+        """ doc """
         if data:
             if type(data) is not list:
                 raise TypeError("data must be a list")
             if len(data) <= 2:
                 raise ValueError("data must contain multiple values")
-            self.n = int(len(data) / 2)
             self.mean = sum(data) / len(data)
-            self.p = float(self.mean / self.n)
+            pre_var = []
+            for i in data:
+                pre_var.append(float((i - self.mean) ** 2))
+            var = float(sum(pre_var) / (len(pre_var))
+            self.p = float(1 - (var / self.mean))
+            self.n = round(self.mean / self.p)
+            self.p = float(self.mean /self.n)
+            """
+            pre_var = []
+            for i in data:
+                pre_var.append(float((i - self.mean) ** 2))
+            var = float(sum(pre_var) / len(pre_var))
+            """
         else:
             if n < 0:
                 raise ValueError("n must be a positive value")
@@ -23,12 +35,14 @@ class Binomial:
             self.p = float(p)
 
     def factorial(self, x):
+        """ doc """
         factorial = 1
         for i in range(1, x+1):
             factorial = factorial * i
         return (factorial)
 
     def pmf(self, k):
+        """ doc """
         if k <= self.n:
             k = int(k)
             n_fact = self.factorial(self.n)
@@ -41,6 +55,7 @@ class Binomial:
             return 0
 
     def cdf(self, k):
+        """ doc """
         if k <= self.n:
             k = int(k)
             acul = 0
