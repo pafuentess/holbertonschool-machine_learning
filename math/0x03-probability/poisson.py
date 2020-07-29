@@ -5,10 +5,10 @@
 class Poisson:
     """ doc """
     def __init__(self, data=None, lambtha=1.):
-        if data:
+        if data is not None:
             if type(data) is not list:
                 raise TypeError("data must be a list")
-            if len(data) < 2:
+            if len(data) <= 2:
                 raise ValueError("data must contain multiple values")
             else:
                 self.lambtha = float(sum(data) / len(data))
