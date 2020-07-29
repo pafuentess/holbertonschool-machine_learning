@@ -38,6 +38,9 @@ class Binomial:
 
     def pmf(self, k):
         """ doc """
+
+        if k < 0:
+            return 0
         if k <= self.n:
             k = int(k)
             n_fact = self.factorial(self.n)
