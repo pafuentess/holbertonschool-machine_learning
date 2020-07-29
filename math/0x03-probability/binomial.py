@@ -16,10 +16,10 @@ class Binomial:
             pre_var = []
             for i in data:
                 pre_var.append(float((i - self.mean) ** 2))
-            var = float(sum(pre_var) / (len(pre_var))
+            var = float(sum(pre_var) / (len(pre_var)))
             self.p = float(1 - (var / self.mean))
             self.n = round(self.mean / self.p)
-            self.p = float(self.mean /self.n)
+            self.p = float(self.mean / self.n)
             """
             pre_var = []
             for i in data:
