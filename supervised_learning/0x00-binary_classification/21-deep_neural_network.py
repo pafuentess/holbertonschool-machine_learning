@@ -76,22 +76,15 @@ class DeepNeuralNetwork:
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ doc """
         m = Y.shape[1]
-        key_final_A = "A{}".format(self.__L)
-        Af = cache[key_final_A]
-        dAf = (-1 * (Y / Af)) + (1 - Y)/(1-Af)
-
-        for i in reversed(range(1, self.__L + 1)):
+        keyA = "A{}".format(self.__L)
+        dz = cache[keyA] - Y
+        for i in range(self.__L, 0, -1):
+            keyA = "A{}".format(i - 1)
             keyW = "W{}".format(i)
             keyb = "b{}".format(i)
-            key_final_A = "A{}".format(i)
-            key_final_A1 = "A{}".format(i - 1)
-            Af = cache[key_final_A]
-            Al1 = cache[key_final_A1]
-            dsigmoid = Af * (1 - Af)
-            dz = np.multiply(dAf, dsigmoid)
-            dw = (1 / m) * np.matmul(dz, Al1.T)
+            A = cache[keyA]
+            dw = (1 / m) * np.matmul(dz, A.T)
             db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
-            w = self.__weights[keyW]
-            dA = np.matmul(w.T, dz)
+            dz = np.matmul(self.weights[keyW].T, dz) * (A * (1 - A))
             self.__weights[keyW] = self.__weights[keyW] - alpha * dw
             self.__weights[keyb] = self.__weights[keyb] - alpha * db
