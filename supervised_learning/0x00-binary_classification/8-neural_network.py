@@ -2,6 +2,7 @@
 """ doc """
 import numpy as np
 
+
 class NeuralNetwork:
     """ doc """
     def __init__(self, nx, nodes):
@@ -19,4 +20,3 @@ class NeuralNetwork:
         self.W2 = np.random.randn(1, nodes)
         self.b2 = 0
         self.A2 = 0
-
