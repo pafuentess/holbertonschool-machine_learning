@@ -79,7 +79,8 @@ class NeuralNetwork:
         db2 = (1/m) * np.sum(dz2, axis=1, keepdims=True)
         self.__W2 = self.__W2 - (alpha*dw2).T
         self.__b2 = self.__b2 - (alpha * db2)
-        dz1 = np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
+        dsigmoid = A1 * (1 - A1)
+        dz1 = np.multiply(np.matmul(self.__W2.T, dz2), dsigmoid)
         dw1 = (1 / m) * np.matmul(X, dz1.T)
         db1 = (1 / m) * np.sum(dz1, axis=1, keepdims=True)
         self.__W1 = self.__W1 - (alpha * dw1).T
