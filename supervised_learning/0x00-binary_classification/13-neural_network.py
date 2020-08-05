@@ -74,7 +74,7 @@ class NeuralNetwork:
 
     def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
         """ doc """
-        m = X.shape[1]
+        m = Y.shape[1]
         dz2 = A2 - Y
         dw2 = (1/m) * np.matmul(A1, dz2.T)
         db2 = (1/m) * np.sum(dz2, axis=1, keepdims=True)
