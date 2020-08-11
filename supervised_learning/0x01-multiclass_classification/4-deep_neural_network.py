@@ -70,7 +70,7 @@ class DeepNeuralNetwork:
             if i != self.__L - 1:
                 if self.__activation == 'sig':
                     self.__cache[keyA] = 1 / (1 + np.exp(-z))
-                else:
+                elif self.__activation == 'tanh':
                     self.__cache[keyA] = np.sinh(z) / np.cosh(z)
             else:
                 t = np.exp(z)
@@ -108,7 +108,7 @@ class DeepNeuralNetwork:
             self.__weights[keyb] = self.__weights[keyb] - alpha * db
             if self.__activation == 'sig':
                 dz = np.matmul(self.__weights[keyW].T, dz) * (A * (1 - A))
-            else:
+            elif self.__activation == 'tanh':
                 dz = np.matmul(self.__weights[keyW].T, dz) * (1 - A * A)
 
     def train(self, X, Y, iterations=5000,
