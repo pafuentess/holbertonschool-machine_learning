@@ -16,7 +16,7 @@ class DeepNeuralNetwork:
             raise ValueError("nx must be a positive integer")
         if type(layers) is not list or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
-        if activation != 'sig' or activation != 'tanh':
+        if activation != 'sig' and activation != 'tanh':
             raise ValueError("activation must be 'sig' or 'tanh'")
 
         self.__L = len(layers)
@@ -131,6 +131,7 @@ class DeepNeuralNetwork:
         cost_list = []
         iter_x = []
         for i in range(iterations + 1):
+            print(i)
             A, cost = self.evaluate(X, Y)
             if verbose is True and (
                     i % step == 0 or i == 0 or i == iterations):
