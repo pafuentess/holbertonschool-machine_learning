@@ -128,6 +128,7 @@ class DeepNeuralNetwork:
                 verbose = True
             if i == iterations:
                 graph = True
+            """
             if graph:
                 if type(step) is not int:
                     raise TypeError("step must be an integer")
@@ -138,6 +139,7 @@ class DeepNeuralNetwork:
                 plt.xlabel("iteration")
                 plt.ylabel("cost")
                 plt.show()
+            """
         return self.evaluate(X, Y)
 
     def save(self, filename):
