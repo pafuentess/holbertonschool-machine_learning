@@ -109,7 +109,7 @@ class DeepNeuralNetwork:
             if self.__activation == 'sig':
                 dz = np.matmul(self.weights[keyW].T, dz) * (A * (1 - A))
             else:
-                dz.matmul(self.weights[keyW].T, dz) * (1 - A * A)
+                dz = np.matmul(self.weights[keyW].T, dz) * (1 - A * A)
 
     def train(self, X, Y, iterations=5000,
               alpha=0.05, verbose=True, graph=True, step=100):
