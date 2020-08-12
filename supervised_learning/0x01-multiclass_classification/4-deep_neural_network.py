@@ -71,7 +71,7 @@ class DeepNeuralNetwork:
                 if self.__activation == 'sig':
                     self.__cache[keyA] = 1 / (1 + np.exp(-z))
                 elif self.__activation == 'tanh':
-                    self.__cache[keyA] = np.sinh(z) / np.cosh(z)
+                    self.__cache[keyA] = (np.exp(z) - np.exp(-z)) / (np.exp(z) + np.exp(-z))
             else:
                 t = np.exp(z)
                 activation = np.exp(z) / np.sum(t, axis=0, keepdims=True)
