@@ -84,11 +84,11 @@ class DeepNeuralNetwork:
         return ((np.sum(loss) / Y.shape[1]))
 
     def evaluate(self, X, Y):
-        """ doc """
-        A, cache = self.forward_prop(X)
-        prediction = np.where(A == np.amax(A, axis=0), 1, 0)
-        cost = self.cost(Y, A)
-        return (prediction, cost)
+        """returns activation and cost"""
+        A, _ = self.forward_prop(X)
+        cost_r = self.cost(Y, A)
+        decode = np.amax(A, axis=0)
+        return (np.where(A == decode, 1, 0), cost_r)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ doc """
