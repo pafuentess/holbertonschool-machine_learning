@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ doc """
 
 import numpy as np
@@ -163,4 +164,3 @@ class DeepNeuralNetwork:
             return fileObject
         except (OSError, IOError) as errors:
             return None
-
