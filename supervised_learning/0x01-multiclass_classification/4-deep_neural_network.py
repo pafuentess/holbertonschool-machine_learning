@@ -131,7 +131,6 @@ class DeepNeuralNetwork:
         cost_list = []
         iter_x = []
         for i in range(iterations + 1):
-            print(i)
             A, cost = self.evaluate(X, Y)
             if verbose is True and (
                     i % step == 0 or i == 0 or i == iterations):
