@@ -9,82 +9,78 @@ import pickle
 class DeepNeuralNetwork:
     """ doc """
     def __init__(self, nx, layers, activation='sig'):
-        """ doc """
-        if type(nx) is not int:
+        if type(nx) != int:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        if type(layers) is not list or len(layers) == 0:
+        if type(layers) != list or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
-        if activation != 'sig' and activation != 'tanh':
+        if activation != "sig" and activation != "tanh":
             raise ValueError("activation must be 'sig' or 'tanh'")
-
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
         self.__activation = activation
-
-        keyw = ""
-        keyb = ""
-        for i in range(self.L):
-            if type(layers[i]) is not int or layers[i] <= 0:
+        num_layer = 1
+        layer_size = nx
+        for i in layers:
+            if type(i) != int or i < 0:
                 raise TypeError("layers must be a list of positive integers")
-            w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
-            b = np.zeros((layers[i], 1))
-            keyw = "W{}".format(i + 1)
-            keyb = "b{}".format(i + 1)
-            self.__weights[keyw] = w
-            self.__weights[keyb] = b
-            nx = layers[i]
+            w = "W" + str(num_layer)
+            b = "b" + str(num_layer)
+            self.__weights[w] = np.random.randn(
+                i, layer_size) * np.sqrt(2/layer_size)
+            self.__weights[b] = np.zeros((i, 1))
+            num_layer += 1
+            layer_size = i
 
     @property
     def L(self):
-        """ doc """
         return self.__L
 
     @property
-    def weights(self):
-        """ doc """
-        return self.__weights
-
-    @property
     def cache(self):
-        """ doc """
         return self.__cache
 
     @property
+    def weights(self):
+        return self.__weights
+
+    @property
     def activation(self):
-        """ doc """
         return self.__activation
 
     def forward_prop(self, X):
         """ doc """
         self.__cache["A0"] = X
-        for i in range(self.__L):
-            keyW = "W{}".format(i + 1)
-            keyb = "b{}".format(i + 1)
-            keyA = "A{}".format(i)
-            b = self.__weights[keyb]
-            z = np.matmul(self.__weights[keyW], self.__cache[keyA]) + b
-            keyA = "A{}".format(i + 1)
-            if i != self.__L - 1:
-                if self.__activation == 'sig':
-                    self.__cache[keyA] = 1 / (1 + np.exp(-z))
-                elif self.__activation == 'tanh':
-                    self.__cache[keyA] = np.sinh(z) / np.cosh(z)
+        for i in range(1, self.__L + 1):
+            w = "W" + str(i)
+            b = "b" + str(i)
+            a = "A" + str(i - 1)
+            Z = np.matmul(self.__weights[w],
+                          self.__cache[a]) + self.__weights[b]
+            a_new = "A" + str(i)
+            if i != self.__L:
+                if self.__activation == "sig":
+                    self.__cache[a_new] = 1 / (1 + np.exp(-Z))
+                else:
+                    self.__cache[a_new] = (
+                        np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
             else:
-                t = np.exp(z)
-                activation = np.exp(z) / np.sum(t, axis=0, keepdims=True)
-                self.__cache[keyA] = activation
-        return self.__cache[keyA], self.__cache
+                t = np.exp(Z)
+                a_new = "A" + str(i)
+                self.__cache[a_new] = t / t.sum(axis=0, keepdims=True)
+        Act = "A" + str(self.__L)
+        return (self.__cache[Act], self.__cache)
 
     def cost(self, Y, A):
-        """Calculates the cost of the model using logistic regression"""
-        loss = -(np.sum(Y * np.log(A), axis=1))
-        return ((np.sum(loss) / Y.shape[1]))
+        """ doc """
+        cost_array = np.log(A) * Y
+        cost = -np.sum(cost_array)/len(A[0])
+        return cost
 
     def evaluate(self, X, Y):
-        """returns activation and cost"""
+        """ doc """
         A, _ = self.forward_prop(X)
         cost_r = self.cost(Y, A)
         decode = np.amax(A, axis=0)
@@ -92,26 +88,25 @@ class DeepNeuralNetwork:
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ doc """
-        m = Y.shape[1]
-        keyA = "A{}".format(self.__L)
-        dz = cache[keyA] - Y
+        weights_copy = self.__weights.copy()
+        dz = cache["A" + str(self.__L)] - Y
         for i in range(self.__L, 0, -1):
-            keyA = "A{}".format(i - 1)
-            keyW = "W{}".format(i)
-            keyb = "b{}".format(i)
-            A = cache[keyA]
-            dw = (1 / m) * np.matmul(dz, A.T)
-            db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
-            self.__weights[keyW] = self.__weights[keyW] - alpha * dw
-            self.__weights[keyb] = self.__weights[keyb] - alpha * db
-            if self.__activation == 'sig':
-                dz = np.matmul(self.__weights[keyW].T, dz) * (A * (1 - A))
-            elif self.__activation == 'tanh':
-                dz = np.matmul(self.__weights[keyW].T, dz) * (1 - A * A)
+            A = cache["A" + str(i - 1)]
+            dw = (1 / len(Y[0])) * np.matmul(dz, A.T)
+            db = (1 / len(Y[0])) * np.sum(dz, axis=1, keepdims=True)
+            w = "W" + str(i)
+            b = "b" + str(i)
+            self.__weights[w] = self.__weights[w] - alpha * dw
+            self.__weights[b] = self.__weights[b] - alpha * db
+            if self.__activation == "sig":
+                dz = np.matmul(weights_copy["W" + str(i)].T, dz) * (
+                    A * (1 - A))
+            else:
+                dz = np.matmul(weights_copy["W" + str(i)].T, dz) * (1 - A * A)
 
     def train(self, X, Y, iterations=5000,
               alpha=0.05, verbose=True, graph=True, step=100):
-        """trains the model"""
+        """ doc """
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:
@@ -148,19 +143,16 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """ doc """
-        extension = filename.split(".")
-        if len(extension) == 1:
+        if filename.split(".")[-1] != "pkl":
             filename = filename + ".pkl"
+        with open(filename, 'wb') as fileObject:
+            pickle.dump(self, fileObject)
 
-        with open(filename, 'wb') as f:
-            pickle.dump(self, f)
-
-    @staticmethod
     def load(filename):
         """ doc """
         try:
-            with open(filename, 'rb') as f:
-                fileObject = pickle.load(f)
-            return fileObject
-        except (OSError, IOError) as errors:
+            with open(filename, 'rb') as file_object:
+                b = pickle.load(file_object)
+                return b
+        except (OSError, IOError) as e:
             return None
