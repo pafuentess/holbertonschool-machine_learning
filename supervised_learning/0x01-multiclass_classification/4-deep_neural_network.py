@@ -79,11 +79,9 @@ class DeepNeuralNetwork:
         return self.__cache[keyA], self.__cache
 
     def cost(self, Y, A):
-        """ doc """
-        m = Y.shape[1]
-        loss = -np.sum(Y * np.log(A), axis=1, keepdims=True)
-        cost = np.sum(loss) / m
-        return (cost)
+        """Calculates the cost of the model using logistic regression"""
+        loss = -(np.sum(Y * np.log(A), axis=1))
+        return ((np.sum(loss) / Y.shape[1]))
 
     def evaluate(self, X, Y):
         """ doc """
