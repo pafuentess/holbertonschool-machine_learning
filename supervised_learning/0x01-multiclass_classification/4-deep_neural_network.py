@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" doc """
+"""doc"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,28 +14,27 @@ class DeepNeuralNetwork:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        if type(layers) is not list or len(layers) == 0:
+        if type(layers) is not list:
             raise TypeError("layers must be a list of positive integers")
-        if activation != 'sig' and activation != 'tanh':
-            raise ValueError("activation must be 'sig' or 'tanh'")
-
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
-        self.__activation = activation
-
-        keyw = ""
-        keyb = ""
-        for i in range(self.L):
-            if type(layers[i]) is not int or layers[i] <= 0:
+        self.__weights["W1"] = np.random.randn(
+            layers[0], nx)*np.sqrt(2/nx)
+        self.__weights["b1"] = np.zeros([layers[0], 1], dtype=float)
+        if layers[0] <= 0 or type(layers[0]) is not int:
+            raise TypeError("layers must be a list of positive integers")
+        for i in range(1, self.L):
+            if layers[i] <= 0 or type(layers[i]) is not int:
                 raise TypeError("layers must be a list of positive integers")
-            w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
-            b = np.zeros((layers[i], 1))
-            keyw = "W{}".format(i + 1)
-            keyb = "b{}".format(i + 1)
-            self.__weights[keyw] = w
-            self.__weights[keyb] = b
-            nx = layers[i]
+            self.__weights["W{}".format(
+                i + 1)] = np.random.randn(layers[i],
+                                          layers[i-1])*np.sqrt(2/layers[i-1])
+            self.__weights["b{}".format(
+                i + 1)] = np.zeros([layers[i], 1], dtype=float)
+        if activation != 'sig' and activation != 'tanh':
+            raise ValueError("activation must be 'sig' or 'tanh'")
+        self.__activation = activation
 
     @property
     def L(self):
@@ -43,14 +42,14 @@ class DeepNeuralNetwork:
         return self.__L
 
     @property
-    def weights(self):
-        """ doc """
-        return self.__weights
-
-    @property
     def cache(self):
         """ doc """
         return self.__cache
+
+    @property
+    def weights(self):
+        """ doc """
+        return self.__weights
 
     @property
     def activation(self):
@@ -60,23 +59,20 @@ class DeepNeuralNetwork:
     def forward_prop(self, X):
         """ doc """
         self.__cache["A0"] = X
-        for i in range(self.__L):
-            keyW = "W{}".format(i + 1)
-            keyb = "b{}".format(i + 1)
-            keyA = "A{}".format(i)
-            b = self.__weights[keyb]
-            z = np.matmul(self.__weights[keyW], self.__cache[keyA]) + b
-            keyA = "A{}".format(i + 1)
-            if i != self.__L - 1:
+        for i in range(1, self.__L + 1):
+            Z = np.matmul(self.__weights["W{}".format(i)],
+                          self.__cache["A{}".format(
+                           i - 1)]) + self.__weights["b{}".format(i)]
+            if i != self.__L:
                 if self.__activation == 'sig':
-                    self.__cache[keyA] = 1 / (1 + np.exp(-z))
-                elif self.__activation == 'tanh':
-                    self.__cache[keyA] = np.sinh(z) / np.cosh(z)
+                    a = 1 / (1 + np.exp(-Z))
+                else:
+                    a = np.sinh(Z) / np.cosh(Z)
             else:
-                t = np.exp(z)
-                activation = np.exp(z) / np.sum(t, axis=0, keepdims=True)
-                self.__cache[keyA] = activation
-        return self.__cache[keyA], self.__cache
+                t = np.exp(Z)
+                a = np.exp(Z) / np.sum(t, axis=0, keepdims=True)
+            self.__cache["A{}".format(i)] = a
+        return (a, self.__cache)
 
     def cost(self, Y, A):
         """ doc """
@@ -84,34 +80,34 @@ class DeepNeuralNetwork:
         return ((np.sum(loss) / Y.shape[1]))
 
     def evaluate(self, X, Y):
-        """returns activation and cost"""
+        """ doc """
         A, _ = self.forward_prop(X)
-        cost_r = self.cost(Y, A)
-        decode = np.amax(A, axis=0)
-        return (np.where(A == decode, 1, 0), cost_r)
+        cost = self.cost(Y, A)
+        prediction = np.where(A == np.amax(A, axis=0), 1, 0)
+        return (prediction, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """ doc """
-        m = Y.shape[1]
-        keyA = "A{}".format(self.__L)
-        dz = cache[keyA] - Y
+        dz = cache["A{}".format(self.__L)] - Y
         for i in range(self.__L, 0, -1):
-            keyA = "A{}".format(i - 1)
-            keyW = "W{}".format(i)
-            keyb = "b{}".format(i)
-            A = cache[keyA]
-            dw = (1 / m) * np.matmul(dz, A.T)
-            db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
-            self.__weights[keyW] = self.__weights[keyW] - alpha * dw
-            self.__weights[keyb] = self.__weights[keyb] - alpha * db
+            db = (np.sum(dz, axis=1, keepdims=True) / Y.shape[1])
+            dw = (np.matmul(cache["A{}".format(i - 1)], dz.T) / Y.shape[1])
             if self.__activation == 'sig':
-                dz = np.matmul(self.__weights[keyW].T, dz) * (A * (1 - A))
-            elif self.__activation == 'tanh':
-                dz = np.matmul(self.__weights[keyW].T, dz) * (1 - A * A)
+                dz = np.matmul(self.__weights["W{}".format(
+                    i)].T, dz) * (cache["A{}".format(
+                        i - 1)] * (1 - cache["A{}".format(i - 1)]))
+            else:
+                dz = np.matmul(self.__weights["W{}".format(
+                    i)].T, dz) * (1 - cache["A{}".format(i - 1)]
+                                  * cache["A{}".format(i - 1)])
+            self.__weights["W{}".format(i)] = self.__weights["W{}".format(
+                i)] - (alpha * dw).T
+            self.__weights["b{}".format(i)] = self.__weights["b{}".format(
+                i)] - (alpha * db)
 
     def train(self, X, Y, iterations=5000,
               alpha=0.05, verbose=True, graph=True, step=100):
-        """trains the model"""
+        """ doc """
         if type(iterations) != int:
             raise TypeError("iterations must be an integer")
         if iterations < 0:
@@ -148,19 +144,16 @@ class DeepNeuralNetwork:
 
     def save(self, filename):
         """ doc """
-        extension = filename.split(".")
-        if len(extension) == 1:
+        if type(filename) is not str:
+            return None
+        if filename[-4:] != ".pkl":
             filename = filename + ".pkl"
-
-        with open(filename, 'wb') as f:
+        with open(filename, mode="wb") as f:
             pickle.dump(self, f)
 
-    @staticmethod
     def load(filename):
         """ doc """
-        try:
-            with open(filename, 'rb') as f:
-                fileObject = pickle.load(f)
-            return fileObject
-        except (OSError, IOError) as errors:
-            return None
+        if os.path.isfile(filename) and os.path.getsize(filename) > 0:
+            with open(filename, mode="rb") as f:
+                return pickle.load(f)
+        return None
