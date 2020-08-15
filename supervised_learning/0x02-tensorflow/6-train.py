@@ -26,21 +26,22 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     tf.add_to_collection('trainOp', trainOp)
 
     saver = tf.train.Saver()
+    initialize = tf.global_variables_initializer()
 
     with tf.Session() as sess:
-        initialize = tf.global_variables_initializer()
         sess.run(initialize)
         for i in range(iterations + 1):
+            print(i)
             cT, aT = sess.run([loss, accuar],
                               feed_dict={x: X_train, y: Y_train})
             cV, aV = sess.run([loss, accuar],
                               feed_dict={x: X_valid, y: Y_valid})
-            if i % 100 == 0 or i == iterations or i == 0:
+            if i % 100 == 0 or i == iterations:
                 print("After {} iterations:".format(i))
                 print("\tTraining Cost: {}".format(cT))
                 print("\tTraining Accuracy: {}".format(aT))
                 print("\tValidation Cost: {}".format(cV))
                 print("\tValidation Accuracy: {}".format(aV))
-            if i != iterations:
+            if i < iterations:
                 sess.run(trainOp, feed_dict={x: X_train, y: Y_train})
-        return saver.save(sess, save_path)
+    return saver.save(sess, save_path)
