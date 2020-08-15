@@ -31,7 +31,6 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     with tf.Session() as sess:
         sess.run(initialize)
         for i in range(iterations + 1):
-            print(i)
             cT, aT = sess.run([loss, accuar],
                               feed_dict={x: X_train, y: Y_train})
             cV, aV = sess.run([loss, accuar],
@@ -44,4 +43,5 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
                 print("\tValidation Accuracy: {}".format(aV))
             if i < iterations:
                 sess.run(trainOp, feed_dict={x: X_train, y: Y_train})
-    return saver.save(sess, save_path)
+        save_path = saver.save(sess, save_path)
+    return saver_path
