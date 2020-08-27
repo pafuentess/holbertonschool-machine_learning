@@ -6,5 +6,5 @@ import tensorflow as tf
 
 def l2_reg_cost(cost):
     """ doc """
-    CostL2 = cost + tf.losses.get_regularization_loss()
+    CostL2 = cost + tf.losses.get_regularization_losses()
     return CostL2
