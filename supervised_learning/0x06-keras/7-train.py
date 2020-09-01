@@ -19,7 +19,7 @@ def train_model(network, data, labels, batch_size, epochs,
                         patience=patience))
     if learning_rate_decay:
         callback.append(K.callbacks.LearningRateScheduler(scheduler,
-                                                              verbose=1))
+                                                          verbose=1))
 
     return network.fit(x=data, y=labels,
                        batch_size=batch_size, epochs=epochs,
