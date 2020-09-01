@@ -11,7 +11,7 @@ def train_model(network, data, labels, batch_size,
     """ doc """
 
     if early_stopping:
-        callback = [keras.callbacks.EarlyStopping(monitor='val_loss',
+        callback = [K.callbacks.EarlyStopping(monitor='val_loss',
                     patience=patience)]
         return network.fit(x=data, y=labels,
                            batch_size=batch_size, epochs=epochs,

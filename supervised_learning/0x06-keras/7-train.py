@@ -18,7 +18,7 @@ def train_model(network, data, labels, batch_size, epochs,
         callback.append(K.callbacks.EarlyStopping(monitor='val_loss',
                         patience=patience))
     if learning_rate_decay:
-        callback.append(keras.callbacks.LearningRateScheduler(scheduler,
+        callback.append(K.callbacks.LearningRateScheduler(scheduler,
                                                               verbose=1))
 
     return network.fit(x=data, y=labels,
