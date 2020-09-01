@@ -16,4 +16,4 @@ def load_config(filename):
     """ doc """
     with open(filename, 'r') as f:
         JsonModel = K.models.model_from_json(f.read())
-    return None
+    return JsonModel
