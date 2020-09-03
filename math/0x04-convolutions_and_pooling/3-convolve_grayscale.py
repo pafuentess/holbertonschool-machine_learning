@@ -26,7 +26,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         Ph = 0
         Pw = 0
 
-    images = np.pad(images, [(0, 0), (Ph, Ph), (Pw, Pw)], constant_values=0)
+    images = np.pad(images, [(0, 0), (Ph, Ph), (Pw, Pw)], 'constant', constant_values=0)
 
     convolutedH = int(((layerH - kernelH + (2 * Ph)) / stride[0]) + 1)
     convolutedW = int(((layerW - kernelW + (2 * Pw)) / stride[1]) + 1)
