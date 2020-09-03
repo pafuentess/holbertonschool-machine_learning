@@ -26,7 +26,8 @@ def convolve_grayscale_same(images, kernel):
     convolutedH = layerH - kernelH + 1 + (2 * Ph)
     convolutedW = layerW - kernelW + 1 + (2 * Pw)
 
-    images = np.pad(images, [(0, 0), (Ph, Ph), (Pw, Pw)], constant_values=0)
+    images = np.pad(images, [(0, 0), (Ph, Ph), (Pw, Pw)],
+                    'constant', constant_values=0)
     convolutedImage = np.zeros((layers, convolutedH, convolutedW))
     Nlayer = np.arange(0, layers)
 
