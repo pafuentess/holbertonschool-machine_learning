@@ -14,19 +14,17 @@ def convolve_grayscale_same(images, kernel):
     kernelH = kernel.shape[0]
     kernelW = kernel.shape[1]
 
+    Ph = int((kernelH - 1) / 2)
+    Pw = int((kernelW - 1) / 2)
+
     if kernelH % 2 == 0:
         Ph = int(kernelH / 2)
-        convolutedH = layerH - kernelH + (2 * Ph)
-    else:
-        Ph = int((kernelH - 1) / 2)
-        convolutedH = layerH - kernelH + 1 + (2 * Ph)
 
     if kernelW % 2 == 0:
         Pw = int(kernelW / 2)
-        convolutedW = layerW - kernelW + (2 * Ph)
-    else:
-        Pw = int((kernelW - 1) / 2)
-        convolutedW = layerW - kernelW + 1 + (2 * Ph)
+
+    convolutedH = layerH - kernelH + 1 + (2 * Ph)
+    convolutedW = layerW - kernelW + 1 + (2 * Pw)
 
     images = np.pad(images, [(0, 0), (Ph, Ph), (Pw, Pw)], constant_values=0)
     convolutedImage = np.zeros((layers, convolutedH, convolutedW))
