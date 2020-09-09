@@ -39,7 +39,7 @@ def lenet5(x, y):
     equal = tf.equal(predicted, opteined)
     accuar = tf.reduce_mean(tf.cast(equal, tf.float32))
 
-    loss = tf.losses.softmax_cross_entropy(Y, L_output)
+    loss = tf.losses.softmax_cross_entropy(y, L_output)
 
     optimize = tf.train.AdamOptimizer().minimize(loss)
 
