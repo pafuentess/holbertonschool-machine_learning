@@ -45,5 +45,5 @@ def inception_network():
     x = K.layers.AvgPool2D((2, 7), padding='same')(x)
     x = K.layers.Dropout(0.4)(x)
     x = K.layers.Dense(1000, activation='softmax')(x)
-
-    return (K.Model(inputs, x))
+    model = K.Model(inputs, x)
+    return (model)
