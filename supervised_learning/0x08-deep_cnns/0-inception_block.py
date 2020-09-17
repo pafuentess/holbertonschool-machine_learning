@@ -6,17 +6,18 @@ import tensorflow.keras as K
 
 def inception_block(A_prev, filters):
     """ doc """
+
     initialize = K.initializers.he_normal(seed=None)
 
     layer1 = K.layers.Conv2D(filters=filters[0], kernel_size=1,
                              padding='same', activation='relu',
                              kernel_initializer=initialize)(A_prev)
 
-    layer2r = K.layers.Conv2D(filters=filters[0], kernel_size=1,
+    layer2r = K.layers.Conv2D(filters=filters[1], kernel_size=1,
                               padding='same', activation='relu',
                               kernel_initializer=initialize)(A_prev)
 
-    layer2 = K.layers.Conv2D(filters=filters[2], kernel_size=1,
+    layer2 = K.layers.Conv2D(filters=filters[2], kernel_size=3,
                              padding='same', activation='relu',
                              kernel_initializer=initialize)(layer2r)
 
@@ -24,7 +25,7 @@ def inception_block(A_prev, filters):
                               padding='same', activation='relu',
                               kernel_initializer=initialize)(A_prev)
 
-    layer3 = K.layers.Conv2D(filters=filters[4], kernel_size=1,
+    layer3 = K.layers.Conv2D(filters=filters[4], kernel_size=5,
                              padding='same', activation='relu',
                              kernel_initializer=initialize)(layer3r)
 
