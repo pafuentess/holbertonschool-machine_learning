@@ -12,9 +12,6 @@ class Yolo:
         self.class_t = class_t
         self.nms_t = nms_t
         self.anchors = anchors
-        self.class_names = []
 
         with open(classes_path, 'r') as f:
-            for line in f:
-                self.class_names.append(line.strip())
-            self.class_names.pop()
+                 self.class_names = [line.strip() for line in f]
