@@ -14,4 +14,4 @@ class Yolo:
         self.anchors = anchors
 
         with open(classes_path, 'r') as f:
-                 self.class_names = [line.strip() for line in f]
+            self.class_names = [line.strip() for line in f]
