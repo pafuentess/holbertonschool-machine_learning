@@ -98,9 +98,7 @@ class Yolo:
             scores.append(conf * prob)
 
         box_class_scores = [score.max(axis=3) for score in scores]
-        print(box_class_scores)
         box_class_scores = [score.reshape(-1) for score in box_class_scores]
-        print(box_class_scores)
         box_score = np.concatenate(box_class_scores)
 
         del_index = np.where(box_score < self.class_t)
