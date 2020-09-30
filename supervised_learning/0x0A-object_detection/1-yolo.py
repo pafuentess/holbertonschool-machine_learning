@@ -48,7 +48,7 @@ class Yolo:
             Index_x = np.arange(grid_W)
 
             Index_y = Index_y.reshape(grid_H, 1, 1)
-            Index_x = Index_x.reshape(grid_W, 1, 1)
+            Index_x = Index_x.reshape(1, grid_W, 1)
 
             caja_y = caja + Index_y
             caja_x = caja + Index_x
