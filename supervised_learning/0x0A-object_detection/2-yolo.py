@@ -93,15 +93,25 @@ class Yolo:
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
         """ doc """
-        box_scores = [x * y for x, y in zip(box_confidences, box_class_probs)]
-        box_class_scores = [np.max(x, axis=-1).reshape(-1) for x in box_scores]
-        box_class_scores = np.concatenate(box_class_scores)
-        box_classes = [np.argmax(x, axis=-1).reshape(-1) for x in box_scores]
-        box_classes = np.concatenate(box_classes)
-        filtering_mask = box_class_scores >= self.class_t
-        list = [np.reshape(x, (-1, 4)) for x in boxes]
-        boxes = np.concatenate(list)
-        boxes = boxes[filtering_mask]
-        scores = box_class_scores[filtering_mask]
-        classes = box_classes[filtering_mask]
-        return (boxes, classes, scores)
+        scores = []
+        for conf, prob in zip(box_confidences, box_class_probs):
+            scores.append(conf * prob)
+
+        box_class_scores = [score.max(axis=3) for score in scores]
+        box_class_scores = [score.reshape(-1) for score in box_class_scores]
+        box_score = np.concatenate(box_class_scores)
+
+        del_index = np.where(box_score < self.class_t)
+
+        box_score = np.delete(box_score, del_index)
+
+        box_class_list = [box.argmax(axis=3) for box in scores]
+        box_class_list = [box.reshape(-1) for box in box_class_list]
+        box_classes = np.concatenate(box_class_list)
+        box_classes = np.delete(box_classes, del_index)
+
+        box_list = [box.reshape(-1, 4) for box in boxes]
+        boxes = np.concatenate(box_list, axis=0)
+        filtered_boxes = np.delete(boxes, del_index, axis=0)
+
+        return filtered_boxes, box_classes, box_score
