@@ -20,7 +20,7 @@ class Yolo:
                 self.class_names.append(line.strip())
             self.class_names.pop()
 
-    def sigmoid(self, x):
+    def sig(self, x):
         """ doc """
         return (1 / (1 + np.exp(-x)))
 
