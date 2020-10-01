@@ -92,7 +92,7 @@ class Yolo:
         return boxes, box_confidences, box_class_probs
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
-        """public method to filter the boxes"""
+        """ doc """
         box_scores = [x * y for x, y in zip(box_confidences, box_class_probs)]
         box_class_scores = [np.max(x, axis=-1).reshape(-1) for x in box_scores]
         box_class_scores = np.concatenate(box_class_scores)
