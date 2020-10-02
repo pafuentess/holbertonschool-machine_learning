@@ -16,12 +16,10 @@ class Yolo:
         self.class_t = class_t
         self.nms_t = nms_t
         self.anchors = anchors
-        self.class_names = []
 
         with open(classes_path, 'r') as f:
-            for line in f:
-                self.class_names.append(line.strip())
-            self.class_names.pop()
+            self.class_names = [line.strip() for line in f]
+
 
     def sigmoid(self, x):
         """ doc """
@@ -51,7 +49,7 @@ class Yolo:
             Index_x = np.arange(grid_W)
 
             Index_y = Index_y.reshape(grid_H, 1, 1)
-            Index_x = Index_x.reshape(grid_W, 1, 1)
+            Index_x = Index_x.reshape(1, grid_W, 1)
 
             caja_y = caja + Index_y
             caja_x = caja + Index_x
