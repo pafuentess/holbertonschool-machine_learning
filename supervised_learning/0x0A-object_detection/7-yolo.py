@@ -11,7 +11,30 @@ import os
 class Yolo:
     """ doc """
     def __init__(self, model_path, classes_path, class_t, nms_t, anchors):
-        """ doc """
+        """
+        Constructor of the class
+        Arguments:
+         - model_path is the path to where a Darknet Keras model is stored
+         - classes_path is the path to where the list of class names used for
+            the Darknet model, listed in order of idx, can be found
+         - class_t is a float representing the box score threshold for
+            the initial filtering step
+         - nms_t is a float representing the IOU threshold for
+            non-max suppression
+         - anchors is a numpy.ndarray of shape (outputs, anchor_boxes, 2)
+            containing all of the anchor boxes:
+            * outputs is the number of outputs (predictions) made by
+                the Darknet model
+            * anchor_boxes is the number of anchor boxes used for
+                each prediction
+            * 2 => [anchor_box_width, anchor_box_height]
+        Public instance attributes:
+         - model: the Darknet Keras model
+         - class_names: a list of the class names for the model
+         - class_t: the box score threshold for the initial filtering step
+         - nms_t: the IOU threshold for non-max suppression
+         - anchors: the anchor boxes
+        """
         self.model = K.models.load_model(model_path)
         self.class_t = class_t
         self.nms_t = nms_t
@@ -20,13 +43,42 @@ class Yolo:
         with open(classes_path, 'r') as f:
             self.class_names = [line.strip() for line in f]
 
-
     def sigmoid(self, x):
-        """ doc """
+        """ Function that calculates sigmoid """
         return (1 / (1 + np.exp(-x)))
 
     def process_outputs(self, outputs, image_size):
-        """ doc """
+        """
+        Public method to process the outputs
+        Arguments:
+         - outputs is a list of numpy.ndarrays containing the predictions
+            from the Darknet model for a single image:
+            Each output will have the shape
+            (grid_height, grid_width, anchor_boxes, 4 + 1 + classes)
+             * grid_height & grid_width => the height and width of
+                the grid used for the output
+             * anchor_boxes => the number of anchor boxes used
+             * 4 => (t_x, t_y, t_w, t_h)
+             * 1 => box_confidence
+             * classes => class probabilities for all classes
+         - image_size is a numpy.ndarray containing the image’s original size
+            [image_size[0], image_size[1]]
+        Returns:
+         A tuple of (boxes, box_confidences, box_class_probs):
+         - boxes: a list of numpy.ndarrays of shape
+                (grid_height, grid_width, anchor_boxes, 4)
+            containing the processed boundary boxes for each output:
+            * 4 => (x1, y1, x2, y2)
+            * (x1, y1, x2, y2) should represent the boundary box
+                relative to original image
+         - box_confidences: a list of numpy.ndarrays of shape
+            (grid_height, grid_width, anchor_boxes, 1)
+            containing the box confidences for each output, respectively
+         - box_class_probs: a list of numpy.ndarrays of shape
+            (grid_height, grid_width, anchor_boxes, classes)
+            containing the box’s class probabilities
+            for each output, respectively
+        """
         image_h = image_size[0]
         image_w = image_size[1]
         boxes = []
@@ -93,7 +145,28 @@ class Yolo:
         return boxes, box_confidences, box_class_probs
 
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
-        """ doc """
+        """
+        Public method to filter the boxes
+        Arguments:
+         - boxes: a list of numpy.ndarrays of shape
+             (grid_height, grid_width, anchor_boxes, 4)
+            containing the processed boundary boxes for each output
+         - box_confidences: a list of numpy.ndarrays of shape
+             (grid_height, grid_width, anchor_boxes, 1)
+            containing the processed box confidences for each output
+         - box_class_probs: a list of numpy.ndarrays of shape
+             (grid_height, grid_width, anchor_boxes, classes)
+            containing the processed box class probabilities for each output
+        Returns:
+         A tuple of (filtered_boxes, box_classes, box_scores):
+         * filtered_boxes: a numpy.ndarray of shape (?, 4) containing
+            all of the filtered bounding boxes:
+         * box_classes: a numpy.ndarray of shape (?,) containing
+            the class number that each box in filtered_boxes predicts,
+            respectively
+         * box_scores: a numpy.ndarray of shape (?) containing
+            the box scores for each box in filtered_boxes, respectively
+        """
         scores = []
         for conf, prob in zip(box_confidences, box_class_probs):
             scores.append(conf * prob)
@@ -119,7 +192,10 @@ class Yolo:
 
     @staticmethod
     def iou(boxA, boxB):
-        """" doc """
+        """
+        Method to calculate intersection over union
+        (x1, y1, x2, y2)
+        """
         # determine the (x, y)-coordinates of the intersection rectangle
         xA = max(boxA[0], boxB[0])
         yA = max(boxA[1], boxB[1])
@@ -139,7 +215,29 @@ class Yolo:
         return iou
 
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-        """ doc """
+        """
+        Public method to select the boxes to keep by its score idx
+        Arguments:
+         - filtered_boxes: a numpy.ndarray of shape (?, 4)
+            containing all of the filtered bounding boxes:
+         - box_classes: a numpy.ndarray of shape (?,)
+            containing the class number for the class that filtered_boxes
+            predicts, respectively
+         - box_scores: a numpy.ndarray of shape (?)
+            containing the box scores for each box in filtered_boxes,
+            respectively
+        Returns:
+         A tuple of
+           (box_predictions, predicted_box_classes, predicted_box_scores):
+         - box_predictions: a numpy.ndarray of shape (?, 4) containing all of
+            the predicted bounding boxes ordered by class and box score
+         - predicted_box_classes: a numpy.ndarray of shape (?,)
+            containing the class number for box_predictions
+            ordered by class and box score, respectively
+         - predicted_box_scores: a numpy.ndarray of shape (?)
+            containing the box scores for box_predictions
+            ordered by class and box score, respectively
+        """
         index = np.lexsort((-box_scores, box_classes))
 
         box_predictions = np.array([filtered_boxes[i] for i in index])
@@ -174,14 +272,38 @@ class Yolo:
 
     @staticmethod
     def load_images(folder_path):
-        """ doc """
+        """
+        Static method to load the images form a path
+        Arguments:
+         - folder_path: a string representing the path to the folder
+            holding all the images to load
+        Returns:
+         A tuple of (images, image_paths):
+             * images: a list of images as numpy.ndarrays
+             * image_paths: a list of paths to the individual images in images
+        """
         image_paths = glob.glob(folder_path + '/*')
         image = [cv2.imread(image) for image in image_paths]
 
         return image, image_paths
 
     def preprocess_images(self, images):
-        """ doc """
+        """
+        Public method to process images
+        Arguments:
+         - images: a list of images as numpy.ndarrays
+        Returns:
+         A tuple of (pimages, image_shapes):
+            - pimages: a numpy.ndarray of shape (ni, input_h, input_w, 3)
+                containing all of the preprocessed images
+                * ni: the number of images that were preprocessed
+                * input_h: the input height for the Darknet model
+                * input_w: the input width for the Darknet model
+                * 3: number of color channels
+            - image_shapes: a numpy.ndarray of shape (ni, 2)
+                containing the original height and width of the images
+                * 2 => (image_height, image_width)
+        """
 
         Input_w = self.model.input.shape[1].value
         Input_h = self.model.input.shape[2].value
@@ -205,7 +327,22 @@ class Yolo:
         return pimages, image_shapes
 
     def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
-        """ doc """
+        """
+        Public method that displays a image with all boundary boxes,
+        class names and box scores.
+        Arguments:
+         - image: a numpy.ndarray containing an unprocessed image
+         - boxes: a numpy.ndarray containing the boundary boxes for the image
+         - box_classes: a numpy.ndarray containing the class indices
+            for each box
+         - box_scores: a numpy.ndarray containing the box scores for each box
+         - file_name: the file path where the original image is stored
+            If the s key is pressed:
+                The image should be saved in the directory detections,
+                located in the current directory
+            If any key besides s is pressed, the image window should be
+            closed without saving
+        """
         for i in range(len(boxes)):
             score = "{:.2f}".format(box_scores[i])
 
@@ -245,8 +382,18 @@ class Yolo:
         cv2.destroyAllWindows()
 
     def predict(self, folder_path):
-        """ doc """
-
+        """
+        Public method to object detection prediction
+        Arguments:
+        - folder_path: a string representing the path to the folder
+            holding all the images to predict
+        Returns:
+         A tuple of (predictions, image_paths):
+            - predictions: a list of tuples for each image of
+                (boxes, box_classes, box_scores)
+            - image_paths: a list of image paths corresponding to each
+                prediction in predictions
+        """
         predictions = []
 
         images, image_paths = self.load_images(folder_path)
