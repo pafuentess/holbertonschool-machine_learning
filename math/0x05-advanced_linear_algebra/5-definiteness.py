@@ -21,7 +21,7 @@ def definiteness(matrix):
     if all(Ev > 0):
         return "Positive definite"
     if all(Ev >= 0):
-        return "Positve semi-definite"
+        return "Positive semi-definite"
     if all(Ev < 0):
         return "Negative definite"
     if all(Ev <= 0):
