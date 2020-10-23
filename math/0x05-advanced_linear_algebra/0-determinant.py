@@ -33,17 +33,10 @@ def determinant(matrix):
         return (minor(matrix))
 
     det = 0
-
-    for i, j in enumerate(matrix[0]):
-        row = [roww for roww in matrix[1:]]
-        new_matrix = []
-        for roww in row:
-            line = []
-            for col in range(len(matrix)):
-                if col != 1:
-                    line.append(roww[col])
-            new_matrix.append(line)
-
-        det = det + j * (-1) ** i * determinant(new_matrix)
+    x = len(matrix)
+    for i, k in enumerate(matrix[0]):
+        rows = [row for row in matrix[1:]]
+        new_m = [[row[n] for n in range(x) if n != i] for row in rows]
+        det += k * (-1) ** i * determinant(new_m)
 
     return det
