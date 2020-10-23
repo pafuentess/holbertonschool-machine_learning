@@ -20,7 +20,7 @@ def determinant(matrix):
 
     for row in matrix:
         if not isinstance(row, list):
-            raise TypeError("matrix must be a list of list")
+            raise TypeError("matrix must be a list of lists")
 
     for row in matrix:
         if len(row) != len(matrix):
