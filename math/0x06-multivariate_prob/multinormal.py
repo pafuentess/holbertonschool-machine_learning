@@ -1,24 +1,45 @@
 #!/usr/bin/env python3
-""" doc """
+""" contain the multinormal class"""
+
 import numpy as np
 
 
 class MultiNormal:
-    """ doc """
+    """
+    Multinormal class
+    """
+
     def __init__(self, data):
-        """Class contructor"""
-        if type(data) is not np.ndarray or len(data.shape) != 2:
-            raise TypeError("data must be a 2D numpy.ndarray")
-        if data.shape[1] < 2:
-            raise ValueError("data must contain multiple data points")
-        mean = np.mean(data, axis=1).reshape((data.shape[0], 1))
-        self.mean = mean
-        self.cov = np.dot(data - self.mean, data.T) / (data.shape[1] - 1)
+        """
+        constructor
+        :param data: numpy.ndarray of shape (d, n) containing the data set:
+            n is the number of data points
+            d is the number of dimensions in each data point
+        """
+        if not isinstance(data, np.ndarray) or len(data.shape) != 2:
+            err = 'data must be a 2D numpy.ndarray'
+            raise TypeError(err)
+        d, n = data.shape
+
+        if n < 2:
+            err = 'data must contain multiple data points'
+            raise ValueError(err)
+
+        self.mean = np.mean(data, axis=1).reshape(d, 1)
+
+        deviaton = data - self.mean
+        self.cov = np.matmul(deviaton, deviaton.T) / (n - 1)
 
     def pdf(self, x):
-        """ doc """
+        """
+        calculates the PDF at a data point
+        :param x: numpy.ndarray of shape (d, 1)
+            containing the data point whose PDF should be calculated
+        :return:  value of the PDF
+        """
         if not isinstance(x, np.ndarray):
-            raise TypeError('x must be a numpy.ndarray')
+            err = 'x must be a numpy.ndarray'
+            raise TypeError(err)
 
         d = self.cov.shape[0]
 
