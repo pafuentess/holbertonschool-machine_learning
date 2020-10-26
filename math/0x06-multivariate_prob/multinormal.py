@@ -25,14 +25,15 @@ class MultiNormal:
         if len(x.shape) != 2 or x.shape[1] != 1 or x.shape[0] != d:
             raise ValueError('x must have the shape ({}, 1)'.format(d))
 
-        constant = 1 / np.sqrt(((2 * np.pi) ** d) * (np.linalg.det(self.cov)))
+        det = np.linalg.det(self.cov)
+        inv = np.linalg.inv(self.cov)
+        constant = 1 / np.sqrt(((2 * np.pi) ** d) * det)
         neg_dev = -(x - self.mean).T
 
-        inner = np.matmul(neg_dev,  np.linalg.inv(self.cov))
+        inner = np.matmul(neg_dev, inv)
         half_dev = (x - self.mean) / 2
         outer = np.matmul(inner, half_dev)
         f = np.exp(outer)
         pdf = constant * f
-        pdf = pdf.reshape(-1)[0]
 
-        return pdf
+        return pdf.reshape(-1)[0]
