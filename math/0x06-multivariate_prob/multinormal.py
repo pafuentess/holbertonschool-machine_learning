@@ -6,20 +6,20 @@ import numpy as np
 class MultiNormal:
     """ doc """
     def __init__(self, data):
-        """ doc """
-        if not isinstance(data, np.ndarray) or len(data.shape) != 2:
-            err = 'data must be a 2D numpy.ndarray'
-            raise TypeError(err)
-        d, n = data.shape
+        if type(data) != np.ndarray or len(data.shape) != 2:
+            raise TypeError("data must be a 2D numpy.ndarray")
 
-        if n < 2:
-            err = 'data must contain multiple data points'
-            raise ValueError(err)
+        if (data.shape[1] < 2):
+            raise ValueError("data must contain multiple data points")
 
-        self.mean = np.mean(data, axis=1).reshape(d, 1)
+        n = data.shape[1]
+        self.mean = np.mean(data, axis=1)
+        d = data.shape[0]
+        self.mean = self.mean.reshape(d, 1)
 
-        deviaton = data - self.mean
-        self.cov = np.matmul(deviaton, deviaton.T) / (n - 1)
+        X = data - self.mean
+
+        self.cov = (np.matmul(X, X.T)) / (n - 1)
 
     def pdf(self, x):
         """ doc """
