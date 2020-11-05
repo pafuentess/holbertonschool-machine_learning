@@ -6,9 +6,9 @@ import numpy as np
 def initialize(X, k):
     """ doc """
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-        return None, None
+        return None
     if type(k) is not int or k <= 0:
-        return None, None
+        return None
 
     minimum = np.amin(X, axis=0)
     maximum = np.amax(X, axis=0)
