@@ -7,20 +7,20 @@ pdf = __import__('5-pdf').pdf
 
 def expectation(X, pi, m, S):
     """ doc """
-    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
-        return None, None
-    if not isinstance(m, np.ndarray) or len(m.shape) != 2:
-        return None, None
-    if not isinstance(S, np.ndarray) or len(S.shape) != 3:
-        return None, None
-    if not isinstance(pi, np.ndarray) or len(pi.shape) != 1:
-        return None, None
-    if X.shape[1] != S.shape[1] or S.shape[1] != S.shape[2]:
-        return None, None
-    if X.shape[1] != m.shape[1] or m.shape[0] != S.shape[0]:
-        return None, None
-    if pi.shape[0] != m.shape[0]:
-        return None, None
+    if type(X) is not np.ndarray or type(m) is not np.ndarray:
+        return (None, None)
+    if type(S) is not np.ndarray or type(pi) is not np.ndarray:
+        return (None, None)
+    if len(X.shape) != 2 or len(S.shape) != 3:
+        return (None, None)
+    if len(pi.shape) != 1 or len(m.shape) != 2:
+        return (None, None)
+    if m.shape[1] != X.shape[1]:
+        return (None, None)
+    if S.shape[2] != S.shape[1]:
+        return (None, None)
+    if S.shape[0] != pi.shape[0] or S.shape[0] != m.shape[0]:
+        return (None, None)
     if np.min(pi) < 0:
         return (None, None)
 
