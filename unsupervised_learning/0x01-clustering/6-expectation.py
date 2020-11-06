@@ -21,6 +21,8 @@ def expectation(X, pi, m, S):
         return None, None
     if pi.shape[0] != m.shape[0]:
         return None, None
+    if np.min(pi) < 0:
+        return (None, None)
 
     n, d = X.shape
     k = S.shape[0]
