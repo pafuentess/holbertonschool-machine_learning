@@ -15,6 +15,6 @@ class GaussianProcess:
 
     def kernel(self, X1, X2):
         """ doc """
-        facto1 = np.sum(X2**2, 1) - 2 * np.dot(X1, X2.T)
+        factor1 = np.sum(X2**2, 1) - 2 * np.dot(X1, X2.T)
         sqdist = np.sum(X1**2, 1).reshape(-1, 1) + factor1
         return self.sigma_f**2 * np.exp(-0.5 / self.l**2 * sqdist)
