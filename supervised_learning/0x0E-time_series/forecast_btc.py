@@ -124,7 +124,7 @@ class WindowGenerator():
 
     @property
     def example(self):
-        """Get and cache an example batch of `inputs, labels` for plotting."""
+        """ doc """
         result = getattr(self, '_example', None)
         if result is None:
             # No example batch was found, so get one from the `.train` dataset
