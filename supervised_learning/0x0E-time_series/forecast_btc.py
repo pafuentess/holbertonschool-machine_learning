@@ -11,12 +11,10 @@ class WindowGenerator():
     def __init__(self, input_width, label_width, shift,
                  train_df, val_df, test_df,
                  label_columns=None):
-        # Store the raw data.
         self.train_df = train_df
         self.val_df = val_df
         self.test_df = test_df
 
-        # Work out the label column indices.
         self.label_columns = label_columns
         if label_columns is not None:
             self.label_columns_indices = {name: i for i, name in
@@ -24,7 +22,6 @@ class WindowGenerator():
         self.column_indices = {name: i for i, name in
                                enumerate(train_df.columns)}
 
-        # Work out the window parameters.
         self.input_width = input_width
         self.label_width = label_width
         self.shift = shift
@@ -50,8 +47,6 @@ class WindowGenerator():
                 [labels[:, :, self.column_indices[name]] for name in c],
                 axis=-1)
 
-    # Slicing doesn't preserve static shape information, so set the shapes
-    # manually. This way the `tf.data.Datasets` are easier to inspect.
         inputs.set_shape([None, self.input_width, None])
         labels.set_shape([None, self.label_width, None])
 
@@ -127,9 +122,7 @@ class WindowGenerator():
         """ doc """
         result = getattr(self, '_example', None)
         if result is None:
-            # No example batch was found, so get one from the `.train` dataset
             result = next(iter(self.train))
-            # And cache it for next time
             self._example = result
         return result
 
