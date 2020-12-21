@@ -4,4 +4,3 @@
 
 class WindowGenerator():
     """ doc """
-    print('Hola Holberton')
