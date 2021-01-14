@@ -2,7 +2,6 @@
 """ doc """
 
 import tensorflow.compat.v2 as tf
-import tensorflow_datasets as tfds
 
 
 def create_masks(inputs, target):
