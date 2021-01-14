@@ -38,6 +38,7 @@ class Dataset:
             self.data_train.prefetch(tf.data.experimental.AUTOTUNE)
 
         self.data_valid = self.data_valid.filter(filter_max_length)
+        padded = ([None], [None])
         self.data_valid.padded_batch(batch_size, padded_shapes=padded)
 
     def tokenize_dataset(self, data):
