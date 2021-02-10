@@ -1,1 +1,2 @@
-this file is mandatory
+# 0x00. Linear Algebra
+<img src="https://holbertonintranet.s3.amazonaws.com/uploads/medias/2018/9/54daaf81421a9b894688.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUWMNL5ANN%2F20210210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210210T004643Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=bcdf62c2821e37eaf804ef08ff61834df03114c2536da6b5163c43aaa954640b" alt="Python" height="200" style="vertical-align:top; margin:4px">
