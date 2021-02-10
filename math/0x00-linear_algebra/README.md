@@ -17,3 +17,6 @@
 <li>What is parallelization and why is it important?</li>
 <li>What is broadcasting?</li>
 
+# Authors
+<li> Paula Fuentes </li> 
+
