@@ -1,5 +1,5 @@
 # Advanced linear algebra
-<img src="https://i.imgur.com/4EeOji4.jpg" alt="Python" height="30" style="vertical-align:top; margin:4px">
+<img src="https://i.imgur.com/4EeOji4.jpg" alt="Python" height="250" style="vertical-align:top; margin:4px">
 
 ## General
 
