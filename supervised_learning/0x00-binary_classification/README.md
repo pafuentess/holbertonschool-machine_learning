@@ -1,7 +1,6 @@
 # CLASIFICATION
 <p align=center>
   <img src="https://i.ibb.co/0YWKVGf/cla2.jpg" alt="cla2" border="0">
-  <img src="https://i.ibb.co/P993JZP/cla1.jpg" alt="cla1" border="0">
 </p>
 
 ## GENERAL
