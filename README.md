@@ -8,3 +8,45 @@
 
 # MATH
 <li>  0x00. Linear Algebra </li>
+<li>  0x01. Plotting </li>
+<li>  0x02. Calculus </li>
+<li>  0x03. Probability  </li>
+<li>  0x04. Convolutions and Pooling </li>
+<li>  0x05. Advanced Linear Algebra </li>
+<li>  0x06. Multivariate Probability </li>
+<li>  0x07. Bayesian Probability </li>
+
+# SUPERVISED LEARNING
+
+<li>  0x01. Classification  </li>
+<li>  0x02. Tensorflow </li>
+<li>  0x03. Optimization  </li>
+<li>  0x04. Error Analysis  </li>
+<li>  0x05. Regularization </li>
+<li>  0x06. Keras </li>
+<li>  0x07. Convolutional Neural Networks </li>
+<li>  0x08. Deep Convolutional Architecturesy </li>
+<li>  0x09. Transfer Learning </li>
+<li>  0x0A. Object Detection </li>
+<li>  0x0C. Neural Style Transfer </li>
+<li>  0x0D. RNNs  </li>
+<li>  0x10. Natural Language Processing - Evaluation Metrics</li>
+<li>  0x0F. Natural Language Processing - Word Embeddings </li>
+<li>  0x11. Attention  </li>
+<li>  0x12. Transformer Applications </li>
+<li>   0x13. QA Bot </li>
+
+# UNSUPERVISED LEARNING
+
+<li>  0x00. Dimensionality Reduction </li>
+<li>  0x01. Clustering </li>
+<li>  0x02. Hidden Markov Models  </li>
+<li>  0x03. Hyperparameter Tuning </li>
+<li>  0x04. Autoencoders </li>
+
+# REINFORCMENT LEARNING
+
+<li>  0x00. Q-learning </li>
+
+
+
