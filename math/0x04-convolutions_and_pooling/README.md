@@ -1,2 +1,2 @@
 # Convolutions and pooling
-<img src="https://ibb.co/4PCZDP5" alt="Python" height="30" style="vertical-align:top; margin:4px">
+<img src="https://i.ibb.co/m6dCY6M/ed9ca14839ad0201f19e.gif" alt="ed9ca14839ad0201f19e" border="0">
