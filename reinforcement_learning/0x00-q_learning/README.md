@@ -1,4 +1,5 @@
 # Q-learning
+<img src="https://i.ibb.co/F5K4w8J/qlearning.jpg" alt="qlearning" border="0">
 ## Read or watch:
 
     An introduction to Reinforcement Learning
