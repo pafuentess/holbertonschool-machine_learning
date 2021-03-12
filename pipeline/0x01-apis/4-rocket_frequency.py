@@ -2,7 +2,8 @@
 """script that displays the number of launches per rocket"""
 import sys
 import requests as rq
-import timeif __name__ == '__main__':
+import time
+if __name__ == '__main__':
     url = "https://api.spacexdata.com/v4/launches"
     r = rq.get(url)
     launches = {}

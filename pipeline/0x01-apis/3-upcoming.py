@@ -2,7 +2,8 @@
 """script that displays the upcoming launch with these information"""
 import sys
 import requests as rq
-import timeif __name__ == '__main__':
+import time
+if __name__ == '__main__':
     url = "https://api.spacexdata.com/v4/launches/upcoming"
     r = rq.get(url)
     launches = sorted(r.json(), key=lambda i: i['date_unix'])
